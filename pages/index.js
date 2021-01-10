@@ -5,9 +5,9 @@ import gql from "graphql-tag";
 
 function Repo(repo) {
   return (
-      <p className={styles.card}>
-        {repo.name}: {repo.url}
-      </p>
+    <p className={styles.card}>
+      {repo.name}: {repo.url}
+    </p>
   );
 }
 
@@ -30,7 +30,7 @@ export default function Home({ repos }) {
         </p>
 
         <div className={styles.grid}>
-          {repos.map(repo => Repo(repo))}
+          {repos.map((repo) => Repo(repo))}
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
@@ -110,13 +110,9 @@ export const getStaticProps = async () => {
       query,
     })
     .then((result) => result);
-  console.log(typeof data);
-  console.log(JSON.stringify(data));
-  const d = { repos: data.data.organization.repositories.nodes };
-  console.log(d);
   return {
     props: {
-      repos: d.repos,
+      repos: data.data.organization.repositories.nodes,
     },
   };
 };
