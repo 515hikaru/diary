@@ -3,15 +3,16 @@ import styles from "../styles/Home.module.css";
 import ApolloClient from "apollo-boost";
 import gql from "graphql-tag";
 
-function Repo(repo) {
+function Artilce(issue) {
   return (
     <p className={styles.card}>
-      {repo.name}: {repo.url}
+      {issue.title}: {issue.url}
     </p>
   );
 }
 
-export default function Home({ repos }) {
+export default function Home({ issues }) {
+  console.log(issues)
   return (
     <div className={styles.container}>
       <Head>
@@ -30,7 +31,7 @@ export default function Home({ repos }) {
         </p>
 
         <div className={styles.grid}>
-          {repos.map((repo) => Repo(repo))}
+          {issues.map((issue) => Artilce(issue.node))}
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
@@ -88,22 +89,23 @@ export const getStaticProps = async () => {
   });
 
   const query = gql`
-    {
-      organization(login: "apollographql") {
-        repositories(first: 5) {
-          nodes {
+  query {
+    repository(owner:"515hikaru", name:"diary"){
+      issues(last:10) {
+        edges {
+          node {
             id
-            name
+            createdAt
+            author { login }
+            title
             url
-            viewerHasStarred
-            stargazers {
-              totalCount
-            }
+            bodyHTML
           }
         }
       }
     }
-  `;
+  }
+`;
 
   const data = await client
     .query({
@@ -112,7 +114,7 @@ export const getStaticProps = async () => {
     .then((result) => result);
   return {
     props: {
-      repos: data.data.organization.repositories.nodes,
+      issues: data.data.repository.issues.edges,
     },
   };
 };
