@@ -1,7 +1,17 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import ApolloClient from "apollo-boost";
+import gql from "graphql-tag";
 
-export default function Home() {
+function Repo(repo) {
+  return (
+      <p className={styles.card}>
+        {repo.name}: {repo.url}
+      </p>
+  );
+}
+
+export default function Home({ repos }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -15,11 +25,12 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
         <div className={styles.grid}>
+          {repos.map(repo => Repo(repo))}
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
@@ -56,10 +67,56 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
+  );
 }
+
+export const getStaticProps = async () => {
+  const client = new ApolloClient({
+    uri: "https://api.github.com/graphql",
+    request: (operation) => {
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
+        },
+      });
+    },
+  });
+
+  const query = gql`
+    {
+      organization(login: "apollographql") {
+        repositories(first: 5) {
+          nodes {
+            id
+            name
+            url
+            viewerHasStarred
+            stargazers {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await client
+    .query({
+      query,
+    })
+    .then((result) => result);
+  console.log(typeof data);
+  console.log(JSON.stringify(data));
+  const d = { repos: data.data.organization.repositories.nodes };
+  console.log(d);
+  return {
+    props: {
+      repos: d.repos,
+    },
+  };
+};
