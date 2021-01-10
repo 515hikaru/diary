@@ -12,7 +12,6 @@ function Artilce(issue) {
 }
 
 export default function Home({ issues }) {
-  console.log(issues)
   return (
     <div className={styles.container}>
       <Head>
