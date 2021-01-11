@@ -11,7 +11,7 @@ jobs:
   - uses: actions/checkout@v2
   - name: Git Config
     run: |
-      git config --local user.email ""
+      git config --local user.email "12kojima.takahiro@gmail.com"
       git config --local user.name "515hikaru"
   - name: Commit
     run: git commit --allow-empty -m "commit for deploy"
