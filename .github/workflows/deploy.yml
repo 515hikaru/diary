@@ -3,7 +3,9 @@ name: CommitEmpty4Deploy
 on:
   issues:
     types:
-      - [opened, edited, reopend]
+      - opened
+      - edited
+      - reopend
 
 jobs:
   runs-on: ubuntu-latest
