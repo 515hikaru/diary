@@ -1,0 +1,19 @@
+name: CommitEmpty4Deploy
+
+on:
+  issues:
+    types:
+      - [opened, edited, reopend]
+
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v2
+  - name: Git Config
+    run: |
+      git config --local user.email ""
+      git config --local user.name "515hikaru"
+  - name: Commit
+    run: git commit --allow-empty -m "commit for deploy"
+  - name: Push
+    run: git push origin main
