@@ -5,7 +5,7 @@ on:
     types:
       - opened
       - edited
-      - reopend
+      - reopened
 
 jobs:
   deploy:
