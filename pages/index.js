@@ -5,7 +5,6 @@ import styles from "../styles/Home.module.css";
 import { fetchDiaryArticles } from "./utils";
 
 function Artilce(issue) {
-  console.log(issue);
   return (
     <Link href={`diary/${issue.number}`}>
       <a key={issue.id} className={styles.card}>

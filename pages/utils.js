@@ -72,7 +72,6 @@ export const fetchDiaryArticles = async () => {
     props: {
       issues: data.map((item) => {
         const url = new URL(item.node.url);
-        console.log(url.pathname);
         item.node.number = url.pathname.split("/").slice(-1)[0];
         return item;
       }),
