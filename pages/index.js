@@ -1,13 +1,17 @@
 import Head from "next/head";
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
-import ApolloClient from "apollo-boost";
-import gql from "graphql-tag";
+
+import { fetchDiaryArticles } from "./utils";
 
 function Artilce(issue) {
+  console.log(issue);
   return (
-    <p className={styles.card}>
-      {issue.title}: {issue.url}
-    </p>
+    <Link href={`diary/${issue.number}`}>
+      <a key={issue.id} className={styles.card}>
+        {issue.title}
+      </a>
+    </Link>
   );
 }
 
@@ -15,105 +19,42 @@ export default function Home({ issues }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>515hikaru Diary</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        <h1 className={styles.title}>Welcome to @515hikaru's diary!</h1>
 
         <div className={styles.grid}>
           {issues.map((issue) => Artilce(issue.node))}
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
         </div>
       </main>
 
       <footer className={styles.footer}>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          rel="license"
+          href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
         >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          <img
+            alt="クリエイティブ・コモンズ・ライセンス"
+            style={{ borderWidth: 0 }}
+            src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png"
+          />
         </a>
+        &nbsp; 当ブログは
+        <a
+          rel="license"
+          href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
+        >
+          クリエイティブ・コモンズ 表示 - 非営利 - 改変禁止 4.0 国際 ライセンス
+        </a>
+        の下に提供されています。
       </footer>
     </div>
   );
 }
 
 export const getStaticProps = async () => {
-  const client = new ApolloClient({
-    uri: "https://api.github.com/graphql",
-    request: (operation) => {
-      operation.setContext({
-        headers: {
-          authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
-        },
-      });
-    },
-  });
-
-  const query = gql`
-  query {
-    repository(owner:"515hikaru", name:"diary"){
-      issues(last:10) {
-        edges {
-          node {
-            id
-            createdAt
-            author { login }
-            title
-            url
-            bodyHTML
-          }
-        }
-      }
-    }
-  }
-`;
-
-  const data = await client
-    .query({
-      query,
-    })
-    .then((result) => result);
-  return {
-    props: {
-      issues: data.data.repository.issues.edges,
-    },
-  };
+  return await fetchDiaryArticles()
 };
