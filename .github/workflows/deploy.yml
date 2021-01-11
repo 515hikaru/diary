@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Validate Actor
-    - run: test $GITHUB_ACTOR = "515hikaru" || exit 0
+      run: test $GITHUB_ACTOR = "515hikaru" || exit 0
     - uses: actions/checkout@v2
     - name: Git Config
       run: |
