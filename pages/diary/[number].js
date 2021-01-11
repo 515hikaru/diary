@@ -1,6 +1,6 @@
 // pages/blog/[id].js
 import styles from "../../styles/Home.module.css";
-import { fetchDiaryArticles, fetchArticleBody } from "../utils";
+import { fetchDiaryArticles, fetchArticleBody } from "../../utils/utils";
 
 export default function DiaryId({ diary }) {
   return (
@@ -30,6 +30,6 @@ export const getStaticProps = async (context) => {
 };
 
 const dateFormat = (dateString) => {
-    const date = new Date(dateString)
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
-}
+  const date = new Date(dateString);
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+};

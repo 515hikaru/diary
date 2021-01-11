@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-import { fetchDiaryArticles } from "./utils";
+import { fetchDiaryArticles } from "../utils/utils";
 
 function Artilce(issue) {
   return (
