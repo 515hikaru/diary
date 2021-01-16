@@ -55,7 +55,7 @@ const totalCountIssues = async () => {
 export const fetchDiaryArticles = async () => {
   const issueCount = await totalCountIssues();
   const results = [];
-  const num = 5;
+  const num = 100;
   let cursor = null;
   for (let i = 0; i < issueCount; i += num) {
     const query = gql`
