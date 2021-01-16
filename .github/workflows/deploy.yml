@@ -8,10 +8,9 @@ on:
 
 jobs:
   deploy:
+    if: github.actor == "515hikaru"
     runs-on: ubuntu-latest
     steps:
-    - name: Validate Actor
-      run: test $GITHUB_ACTOR = "515hikaru" || exit 1
     - uses: actions/checkout@v2
     - name: Git Config
       run: |
