@@ -55,8 +55,8 @@ const totalCountIssues = async () => {
 export const fetchDiaryArticles = async () => {
   const issueCount = await totalCountIssues();
   const results = [];
-  const num = 5
-  let cursor = null
+  const num = 5;
+  let cursor = null;
   for (let i = 0; i < issueCount; i += num) {
     const query = gql`
       query Issues($cursor: String){
@@ -91,24 +91,26 @@ export const fetchDiaryArticles = async () => {
     const data = await client
       .query({
         query,
-        variables: { cursor }
+        variables: { cursor },
       })
       .then((result) => result);
     cursor = data.data.repository.issues.pageInfo.endCursor;
-    results.push(...filterDiary(data.data.repository.issues.edges))
+    results.push(...filterDiary(data.data.repository.issues.edges));
   }
 
   return {
     props: {
-      issues: results.map((item) => {
-        const url = new URL(item.node.url);
-        item.node.number = url.pathname.split("/").slice(-1)[0];
-        return item;
-      }).sort((a, b) => {
-        if(a.createdAt > b.createdAt) return -1;
-        if(a.createdAt < b.createdAt) return 1;
-        return 0
-      }),
+      issues: results
+        .map((item) => {
+          const url = new URL(item.node.url);
+          item.node.number = url.pathname.split("/").slice(-1)[0];
+          return item;
+        })
+        .sort((a, b) => {
+          if (a.createdAt > b.createdAt) return -1;
+          if (a.createdAt < b.createdAt) return 1;
+          return 0;
+        }),
     },
   };
 };
