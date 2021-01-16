@@ -3,6 +3,17 @@ import gql from "graphql-tag";
 
 import { loginUserName, articleLabelId } from "./constants";
 
+const client = new ApolloClient({
+  uri: "https://api.github.com/graphql",
+  request: (operation) => {
+    operation.setContext({
+      headers: {
+        authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
+      },
+    });
+  },
+});
+
 const filterArticleLabel = (labels) => {
   return labels.filter((label) => {
     return label.node.id == articleLabelId;
@@ -20,77 +31,89 @@ const filterDiary = (issues) => {
     });
 };
 
-export const fetchDiaryArticles = async () => {
-  const client = new ApolloClient({
-    uri: "https://api.github.com/graphql",
-    request: (operation) => {
-      operation.setContext({
-        headers: {
-          authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
-        },
-      });
-    },
-  });
-
+const totalCountIssues = async () => {
   const query = gql`
     query {
       repository(owner: "515hikaru", name: "diary") {
-        issues(last: 100, orderBy: { field: CREATED_AT, direction: DESC }) {
-          edges {
-            node {
-              id
-              title
-              url
-              createdAt
-              author {
-                login
-              }
-              labels(first: 5) {
-                edges {
-                  node {
-                    id
-                    name
-                  }
-                }
-              }
-            }
-          }
+        issues {
+          totalCount
         }
       }
     }
   `;
-
-  const data = await client
+  const count = await client
     .query({
       query,
     })
     .then((result) => {
-      const issueEdges = result.data.repository.issues.edges;
-      return filterDiary(issueEdges);
+      return result.data.repository.issues.totalCount;
     });
+
+  return count;
+};
+
+export const fetchDiaryArticles = async () => {
+  const issueCount = await totalCountIssues();
+  const results = [];
+  const num = 5
+  let cursor = null
+  for (let i = 0; i < issueCount; i += num) {
+    const query = gql`
+      query Issues($cursor: String){
+        repository(owner: "515hikaru", name: "diary") {
+          issues(first: ${num} after: $cursor, orderBy: { field: CREATED_AT, direction: DESC }) {
+            edges {
+              node {
+                id
+                title
+                url
+                createdAt
+                author {
+                  login
+                }
+                labels(first: 5) {
+                  edges {
+                    node {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            }
+            pageInfo {
+              endCursor
+            }
+          }
+        }
+      }
+    `;
+    const data = await client
+      .query({
+        query,
+        variables: { cursor }
+      })
+      .then((result) => result);
+    cursor = data.data.repository.issues.pageInfo.endCursor;
+    results.push(...filterDiary(data.data.repository.issues.edges))
+  }
+
   return {
     props: {
-      issues: data.map((item) => {
+      issues: results.map((item) => {
         const url = new URL(item.node.url);
         item.node.number = url.pathname.split("/").slice(-1)[0];
         return item;
+      }).sort((a, b) => {
+        if(a.createdAt > b.createdAt) return -1;
+        if(a.createdAt < b.createdAt) return 1;
+        return 0
       }),
     },
   };
 };
 
 export const fetchArticleBody = async (number) => {
-    const client = new ApolloClient({
-        uri: "https://api.github.com/graphql",
-        request: (operation) => {
-          operation.setContext({
-            headers: {
-              authorization: `Bearer ${process.env.PERSONAL_ACCESS_TOKEN}`,
-            },
-          });
-        },
-      });
-    
   const query = gql`
     {
       repository(owner: "515hikaru", name: "diary") {
@@ -104,17 +127,16 @@ export const fetchArticleBody = async (number) => {
     }
   `;
   const data = await client
-  .query({
-    query,
-  })
-  .then((result) => {
-    return result.data.repository.issue;
-  });
+    .query({
+      query,
+    })
+    .then((result) => {
+      return result.data.repository.issue;
+    });
 
   return {
-  props: {
-    diary: data
-  },
-};
-
+    props: {
+      diary: data,
+    },
+  };
 };
