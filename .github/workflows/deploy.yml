@@ -1,22 +1,21 @@
 name: CommitEmpty4Deploy
-
 on:
-  issues:
-    types:
-      - opened
-      - edited
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '23 14 * * *'
+  push:
+    branches:
+      - main
 
-jobs:
+ jobs:
   deploy:
-    if: github.actor == '515hikaru'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Git Config
-      run: |
-        git config --local user.email "12kojima.takahiro@gmail.com"
-        git config --local user.name "515hikaru"
-    - name: Commit
-      run: git commit --allow-empty -m "commit for deploy"
-    - name: Push
-      run: git push origin main
+      - uses: actions/checkout@v2
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
