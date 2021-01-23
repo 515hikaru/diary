@@ -107,8 +107,8 @@ export const fetchDiaryArticles = async () => {
           return item;
         })
         .sort((a, b) => {
-          if (a.createdAt > b.createdAt) return -1;
-          if (a.createdAt < b.createdAt) return 1;
+          if (a.node.createdAt > b.node.createdAt) return -1;
+          if (a.node.createdAt < b.node.createdAt) return 1;
           return 0;
         }),
     },
@@ -122,6 +122,7 @@ export const fetchArticleBody = async (number) => {
         issue(number: ${number}) {
           id
           title
+          url
           createdAt
           bodyHTML
         }
