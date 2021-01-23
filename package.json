@@ -13,7 +13,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "apollo-boost": "^0.4.9",
-    "destyle.css": "^2.0.2",
     "font-awesome": "^4.7.0",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
