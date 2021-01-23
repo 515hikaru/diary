@@ -1,36 +1,39 @@
 import Head from "next/head";
 import Link from "next/link";
-import styles from "../styles/Home.module.css";
 
 import { fetchDiaryArticles } from "../utils/utils";
 
 function Artilce(issue) {
   return (
-    <Link href={`diary/${issue.number}`}>
-      <a key={issue.id} className={styles.card}>
-        {issue.title}
-      </a>
-    </Link>
+    <div key={issue.id} className='article'>
+      <Link href={`diary/${issue.number}`}>
+        <h2>
+          <a>{issue.title}</a>
+        </h2>
+      </Link>
+    </div>
   );
 }
 
 export default function Home({ issues }) {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>515hikaru Diary</title>
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/spcss@0.6.0"
+        ></link>
+
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to @515hikaru's diary!</h1>
-
-        <div className={styles.grid}>
-          {issues.map((issue) => Artilce(issue.node))}
-        </div>
+      <main>
+        <h1>Welcome to @515hikaru's diary!</h1>
+        {issues.map((issue) => Artilce(issue.node))}
       </main>
 
-      <footer className={styles.footer}>
+      <footer>
         <a
           rel="license"
           href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
@@ -55,5 +58,5 @@ export default function Home({ issues }) {
 }
 
 export const getStaticProps = async () => {
-  return await fetchDiaryArticles()
+  return await fetchDiaryArticles();
 };
