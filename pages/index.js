@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 
+import styles from "./styles.module.css";
+
 import { fetchDiaryArticles } from "../utils/utils";
 
 function Artilce(issue) {
   return (
-    <div key={issue.id} className='article'>
+    <div key={issue.id} className={styles.article}>
       <Link href={`diary/${issue.number}`}>
         <h2>
           <a>{issue.title}</a>
@@ -29,7 +31,7 @@ export default function Home({ issues }) {
       </Head>
 
       <main>
-        <h1>Welcome to @515hikaru's diary!</h1>
+        <h1 className={styles.title}>Welcome to @515hikaru's diary!</h1>
         {issues.map((issue) => Artilce(issue.node))}
       </main>
 

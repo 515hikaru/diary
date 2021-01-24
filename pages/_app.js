@@ -1,4 +1,4 @@
-import "../styles/styles.css";
+import "../styles/global.css";
 import "font-awesome/css/font-awesome.min.css";
 
 function MyApp({ Component, pageProps }) {
