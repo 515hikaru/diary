@@ -27,7 +27,6 @@ export default function Home({ issues }) {
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/spcss@0.6.0"
         ></link>
-
       </Head>
 
       <main>

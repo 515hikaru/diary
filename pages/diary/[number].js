@@ -8,7 +8,6 @@ import styles from "./styles.module.css";
 
 import { fetchDiaryArticles, fetchArticleBody } from "../../utils/utils";
 
-
 export default function DiaryId({ diary }) {
   return (
     <div>
@@ -23,7 +22,15 @@ export default function DiaryId({ diary }) {
       <main>
         <h1 className={styles.title}>{diary.title}</h1>
         <div>
-          <p className={styles.createdat}>{dateFormat(diary.createdAt)} <a href={diary.url}><FontAwesomeIcon className={styles.github} icon={faGithubSquare} size='xs' /></a>
+          <p className={styles.createdat}>
+            {dateFormat(diary.createdAt)}{" "}
+            <a href={diary.url}>
+              <FontAwesomeIcon
+                className={styles.github}
+                icon={faGithubSquare}
+                size="xs"
+              />
+            </a>
           </p>
         </div>
         <div
