@@ -4,15 +4,10 @@ import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithubSquare } from "@fortawesome/free-brands-svg-icons";
 
+import styles from "./styles.module.css";
+
 import { fetchDiaryArticles, fetchArticleBody } from "../../utils/utils";
 
-{
-  /* <div className='article-ex'>
-<a href={issue.url}>
-  <FontAwesomeIcon icon={faExternalLinkAlt} size='xs' />
-</a>
-</div> */
-}
 
 export default function DiaryId({ diary }) {
   return (
@@ -26,9 +21,9 @@ export default function DiaryId({ diary }) {
         ></link>
       </Head>
       <main>
-        <h1 style={{fontSize: '3rem'}}>{diary.title}</h1>
+        <h1 className={styles.title}>{diary.title}</h1>
         <div>
-          <p style={{fontSize: '1rem'}}>{dateFormat(diary.createdAt)} <a href={diary.url}><FontAwesomeIcon style={{height: '1rem'}} icon={faGithubSquare} size='xs' /></a>
+          <p className={styles.createdat}>{dateFormat(diary.createdAt)} <a href={diary.url}><FontAwesomeIcon className={styles.github} icon={faGithubSquare} size='xs' /></a>
           </p>
         </div>
         <div
