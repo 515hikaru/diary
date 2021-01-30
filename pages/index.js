@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import styles from "./styles.module.css";
 
+import { generateRssFeed } from "../utils/rss";
 import { fetchDiaryArticles } from "../utils/utils";
 
 function Artilce(issue) {
@@ -59,5 +60,6 @@ export default function Home({ issues }) {
 }
 
 export const getStaticProps = async () => {
+  await generateRssFeed();
   return await fetchDiaryArticles();
 };

@@ -19,3 +19,5 @@ jobs:
           vercel-args: '--prod -f'
           vercel-org-id: ${{ secrets.ORG_ID}}
           vercel-project-id: ${{ secrets.PROJECT_ID}}
+    env:
+      BASE_URL: https://diary.515hikaru.dev
