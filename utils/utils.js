@@ -68,6 +68,7 @@ export const fetchDiaryArticles = async () => {
                 title
                 url
                 createdAt
+                bodyHTML
                 author {
                   login
                 }
