@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRss } from "@fortawesome/free-solid-svg-icons";
+
 import styles from "./styles.module.css";
 
 import { generateRssFeed } from "../utils/rss";
@@ -31,7 +34,16 @@ export default function Home({ issues }) {
       </Head>
 
       <main>
-        <h1 className={styles.title}>Welcome to @515hikaru's diary!</h1>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Welcome to @515hikaru's diary!</h1>
+            <a href="https://diary.515hikaru.dev/rss/feed.xml">
+              <FontAwesomeIcon
+                className={styles.rss}
+                icon={faRss}
+                size="xs"
+              />
+            </a>
+        </div>
         {issues.map((issue) => Artilce(issue.node))}
       </main>
 
