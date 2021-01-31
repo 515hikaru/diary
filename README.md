@@ -5,7 +5,7 @@ GitHub Issues の Issue ひとつを日記にする試み
 
 Next.js を静的サイトジェネレータとして使っています。ビルド時に GitHub の GraphQL API を叩くことで GitHub Issues から記事を取得しています。
 
-ビルドしたページは Vercel にデプロイしています。 https://515hikaru-diary.vercel.app/
+ビルドしたページは Vercel にデプロイしています。 https://diary.515hikaru.dev/
 
 # 内容
 
